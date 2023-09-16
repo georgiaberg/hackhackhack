@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react";
-import styles from "../page.module.scss";
+import styles from "./write.module.scss";
 import { Newsreader } from "next/font/google";
 import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";

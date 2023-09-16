@@ -1,5 +1,5 @@
 
-import styles from "./page.module.scss";
+import styles from "./read.module.scss";
 import { Note } from "@/types/types";
 import { Newsreader } from "next/font/google";
 

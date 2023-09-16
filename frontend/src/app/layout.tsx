@@ -1,7 +1,6 @@
 "use client";
 
 import "./globals.scss";
-import styles from './page.module.scss'
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Header } from "./shared/header";
