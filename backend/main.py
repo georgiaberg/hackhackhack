@@ -39,7 +39,6 @@ def generate_idea(industry):
         stop_sequences=["--"])
     response = response.generations[0].text
     response = response.replace("\n\n--","").replace("\n--","").strip()
-    print(response)
     return response
 
 
@@ -60,16 +59,3 @@ def generate_name(idea):
     return response
 
 print(generate_idea("Tech"))
-
-
-st.title("🚀 Startup Idea Generator")
-
-form = st.form(key="user_settings")
-with form:
-    industry_input = st.text_input("Industry", key = "industry_input")
-    generate_button = form.form_submit_button("Generate Idea")
-    if generate_button:
-        startup_idea = generate_idea(industry_input)
-        startup_name = generate_name(startup_idea)
-        st.markdown("##### " + startup_name)
-        st.write(startup_idea)
