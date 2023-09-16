@@ -4,7 +4,9 @@
 
   --background-1: #FFF4EC;
   --background-2: var(--light-orange);
+  --background-3: var(--warm-orange);
   --text-1: #333;
+  --text-invert: #fff;
   --accent-text-1: var(--warm-orange);
   --accent-text-2: var(--light-orange);
   --border-1: var(--accent-text-1);
@@ -25,6 +27,7 @@ body {
   overflow-x: hidden;
   background-color: var(--background-1);
   height: 100vh;
+  color: var(--text-1);
 }
 
 body {

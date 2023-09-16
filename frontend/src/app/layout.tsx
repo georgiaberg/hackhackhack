@@ -2,12 +2,13 @@
 
 import "./globals.scss";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Newsreader } from "next/font/google";
 import { Nav } from "./shared/nav";
 import React from "react";
 import { Footer } from "./shared/footer";
+import Head from "next/head";
 
-const inter = Inter({ subsets: ["latin"] });
+const font = Newsreader({ weight: ["300", "400"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Afterthought",
@@ -21,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={font.className}>
         <Nav />
         {children}
         <Footer />
