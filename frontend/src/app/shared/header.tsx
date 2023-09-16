@@ -32,7 +32,13 @@ const NavBarButton: React.FC<{
   const pathname = usePathname();
 
   return (
-    <li className={`${pathname.includes(href) ? "active" : ""}`}>
+    <li
+      className={`${
+        pathname.includes(href) || (href.includes("read") && pathname === "/")
+          ? "active"
+          : ""
+      }`}
+    >
       <Link href={href}>{name}</Link>
     </li>
   );
