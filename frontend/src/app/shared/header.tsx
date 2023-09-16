@@ -1,5 +1,5 @@
 import Head from "next/head";
-import styles from "../nav.module.scss";
+import styles from "./nav.module.scss";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Scheherazade_New } from "next/font/google";
