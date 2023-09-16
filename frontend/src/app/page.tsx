@@ -1,5 +1,6 @@
-import { Note } from "@/pages/api/types";
-import styles from "@/styles/main.module.scss";
+
+import styles from "./page.module.scss";
+import { Note } from "@/types/types";
 import { Newsreader } from "next/font/google";
 
 const font = Newsreader({ weight: ["300", "400"], subsets: ["latin"] });
@@ -28,6 +29,7 @@ export const ReadContent: React.FC<{}> = () => {
     </div>
   );
 };
+export default ReadContent;
 
 const NoteCard: React.FC<{ note: Note }> = ({ note }) => {
   return (

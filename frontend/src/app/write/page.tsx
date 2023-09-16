@@ -1,10 +1,11 @@
+"use client"
+
 import React from "react";
-import styles from "@/styles/main.module.scss";
+import styles from "../page.module.scss";
 import { Newsreader } from "next/font/google";
 import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill";
 
-const ReactQuill =
-  typeof window === "object" ? require("react-quill") : () => false;
 const font = Newsreader({ weight: ["300", "400"], subsets: ["latin"] });
 
 export const WriteContent: React.FC<{}> = () => {
@@ -24,10 +25,10 @@ export const WriteContent: React.FC<{}> = () => {
       ></input>
       <ReactQuill theme="snow"></ReactQuill>
       <div>
-        <span id={styles.lastSaved}>
-          No changes found
-        </span>
+        <span id={styles.lastSaved}>No changes found</span>
       </div>
     </div>
   );
 };
+
+export default WriteContent;
