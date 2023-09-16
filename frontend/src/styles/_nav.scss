@@ -1,0 +1,36 @@
+nav#nav {
+  display: flex;
+  margin: auto;
+
+  ul {
+    display: flex;
+    max-width: 880px;
+    border-bottom: 1px solid var(--border-1);
+    margin: auto;
+    width: 100%;
+    
+    li {
+      list-style: none;
+      padding-top: 30px;
+      padding-bottom: 10px;
+      font-size: 2.60em;
+      flex-grow: 1;
+      text-align: center;
+      cursor: pointer;
+
+      color:var(--accent-text-2);
+      font-weight: 900;
+
+      &:first-child {
+        text-align: left;
+      }
+      &:last-child {
+        text-align: right;
+      }
+
+      &[class~="active"] {
+        color:var(--accent-text-1);
+      }
+    }
+  }
+}

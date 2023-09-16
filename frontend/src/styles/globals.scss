@@ -1,5 +1,9 @@
 :root {
-  --background-1: hsl(47, 100%, 96%);
+  --background-1: #FFF4EC;
+  --text-1: #333;
+  --accent-text-1: #BC6C25;
+  --accent-text-2: #BC6C2580;
+  --border-1: var(--accent-text-1);
 }
 
 * {
