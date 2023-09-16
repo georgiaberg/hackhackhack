@@ -2,8 +2,6 @@
   max-width: var(--max-width);
   margin: auto;
 
-  min-height: 80vh;
-
   input[id~="new-title"] {
     background: none;
     border: none;
@@ -17,9 +15,16 @@
     outline: none;
   }
 
+  div[id~="quill-container"] {
+    max-height: 55vh;
+    margin-bottom: 16px;
+    overflow: auto;  
+  }
+
   div[class~="quill"] {
     color: var(--text-1);
     margin: 16px 0;
+    max-height: 60vh;
     font-weight: 400;
 
     div[class~="ql-toolbar"], div[class~="ql-editor"] {

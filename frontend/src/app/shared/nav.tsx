@@ -6,7 +6,7 @@ import { Scheherazade_New } from "next/font/google";
 
 const font = Scheherazade_New({ weight: "700", subsets: ["latin"] });
 
-export const Header: React.FC<{}> = () => {
+export const Nav: React.FC<{}> = () => {
   return (
     <>
       <Head>
