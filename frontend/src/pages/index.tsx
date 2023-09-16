@@ -1,10 +1,10 @@
 import { Scheherazade_New } from "next/font/google";
 import styles from "@/styles/main.module.scss";
-import { Header, TabSelection } from "./shared/header";
+import { Header, TabSelection } from "../components/shared/header";
 import React from "react";
-import { ReadContent } from "./tab-bodies/read-content";
-import { ReflectContent } from "./tab-bodies/reflect-content";
-import { WriteContent } from "./tab-bodies/write-content";
+import { ReadContent } from "../components/tab-bodies/read-content";
+import { ReflectContent } from "../components/tab-bodies/reflect-content";
+import { WriteContent } from "../components/tab-bodies/write-content";
 
 const font = Scheherazade_New({ weight: "700", subsets: ["latin"] });
 

@@ -1,0 +1,35 @@
+#writeContent {
+  max-width: var(--max-width);
+  margin: auto;
+
+  min-height: 80vh;
+
+  input[id~="new-title"] {
+    background: none;
+    border: none;
+    font-style: italic;
+    color: var(--text-1);
+    font-size: 1.5rem;
+    padding-top: 40px;
+    font-weight: 700;
+    width: 100%;
+    font-family: var(--font-family-1);
+    outline: none;
+  }
+
+  div[class~="quill"] {
+    color: var(--text-1);
+    margin: 16px 0;
+    font-weight: 400;
+
+    div[class~="ql-toolbar"], div[class~="ql-editor"] {
+      font-family: var(--font-family-1);
+    }
+  }
+}
+
+#lastSaved {
+  color: var(--text-1);
+  font-weight: 400;
+  float: right;
+}

@@ -1,9 +1,16 @@
 :root {
+  --warm-orange: #BC6C25;
+  --light-orange: #DDA15E80;
+
   --background-1: #FFF4EC;
+  --background-2: var(--light-orange);
   --text-1: #333;
-  --accent-text-1: #BC6C25;
-  --accent-text-2: #BC6C2580;
+  --accent-text-1: var(--warm-orange);
+  --accent-text-2: var(--light-orange);
   --border-1: var(--accent-text-1);
+
+  --max-width: 880px;
+  --font-family-1: Newsreader;
 }
 
 * {

@@ -1,0 +1,50 @@
+#noteCards {
+  max-width: var(--max-width);
+  margin: auto;
+  padding-top: 20px;
+
+  display: flex;
+  gap: 40px;
+  flex-direction: column;
+}
+
+.readCard {
+  background-color: var(--background-2);
+  color: var(--text-1);
+  font-weight: 400;
+  border-radius: 16px;
+  padding: 1em;
+  line-height: 1.15em;
+  transition: 0.15s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--warm-orange);
+    color: white;
+  }
+
+  div[class~="title-row"] {
+    display: flex;
+    padding-bottom: 8px;
+    
+    h1[class~="title"] {
+      font-size: 1.5rem;
+    }
+
+    span[class~="date"] {
+      flex-grow: 1;
+      text-align: right;
+      font-weight: 300;
+      font-size: 1.2rem;
+
+      font-style: italic;
+    }
+  }
+
+  h1 {
+    font-weight: 400;
+  }
+
+  p {
+  }
+}

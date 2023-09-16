@@ -53,6 +53,6 @@ const NavBarButton: React.FC<{
   setCurrentTab: (newTab: TabSelection) => void;
 }> = ({ tab, currentTab, setCurrentTab, name }) => (
   <li className={`${tab === currentTab ? "active" : ""}`}>
-    <a onClick={() => setCurrentTab(tab)}>{name}</a>
+    <a onClick={() => setCurrentTab(tab)} href="javascript:void(0);">{name}</a>
   </li>
 );
