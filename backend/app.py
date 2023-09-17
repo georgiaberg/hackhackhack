@@ -49,7 +49,7 @@ def get_notes():
         cur.close()
         conn.close()
 
-        notes = [{"id": row[0], "title": row[1], "content": row[2], "date": row[3]} for row in result]
+        notes = [{"id": row[0], "title": row[1], "content": row[2], "date": row[3], "sentiment": row[4], "types": row[5]} for row in result]
         return jsonify({"notes": notes}), 200
 
     except Exception as e:

@@ -14,9 +14,6 @@ def getSummary(notes, format):
     # Use Cohere API to summarize the notes
     response = co.summarize(
         text=notes_string,
-        # model='command',
-        # length='medium',
-        # extractiveness='medium',
         format=format
     )
     summary = response.summary
