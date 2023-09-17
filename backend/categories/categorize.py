@@ -3,8 +3,6 @@ from flask import request, jsonify
 from flask_restful import Resource
 import cohere
 from collections import defaultdict
-# from sentiment_examples import semexamples, sentiments
-# from type_examples import examples, types
 import datetime
 from cohere.responses.classify import Example
 
@@ -82,7 +80,7 @@ examples = [
     Example("I'm constantly inspired by Sarah's creative talents.", "Relationship"),
     ]
 
-
+# categories to leverage: experience, to-do, relationship, goal
 def catty(note):
     string = note["content"]
     delimiters = ['?', '.', '!']

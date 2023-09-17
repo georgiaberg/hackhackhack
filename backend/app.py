@@ -35,7 +35,7 @@ def add_note():
         title = note_data['title']
         content = note_data['content']
         date = note_data['date']
-        categorized_note = catty(note_data)
+        categorized_note = catty(note_data["content"])
         sentiment = categorized_note['sentiment']
         types = categorized_note['types']
         

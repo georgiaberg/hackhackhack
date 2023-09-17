@@ -14,16 +14,16 @@ def getSummary(notes_string, format="paragraph"):
         response = co.generate(
             prompt=f"Summarize the following journal entries:{notes_string}",
             max_tokens=100,
-            temperature=0.5
+            temperature=0.5,
         )
         summary = response.generations[0].text.strip()
-        return summary
-    response = co.summarize(
-        text=notes_string,
-        format=format,
-        additional_command="in a third-person, reflection-inspiring tone",
-    )
-    summary = response.summary
+    else:
+        response = co.summarize(
+            text=notes_string,
+            format=format,
+            additional_command="in a third-person, reflection-inspiring tone",
+        )
+        summary = response.summary
     return summary
 
 
@@ -33,17 +33,15 @@ def getQuestions(notes_string):
     prompt = f"""Based on the following notes :\n
                 {notes_string},
                 what reflective questions or exercises can be asked?
-                Please list no more than 3 reflective questions and 2 writing exercises.
-                You must cite the title and date of the note that the variable is from at the end of your question or exercise.
-                Remember, any content within <> represents a variable
-                that can be replaced with a word or phrase from a note and cited with the respective title and date.\n
-                Here are some examples, follow this format and don't output anything extra:\n
+                Please come up with no more than 5 creative reflective questions writing exercises.
+                You must cite the title and date of the note relating to your question or exercise.
+                Here are some examples, follow this format and don't output anything extra. \n
                 1. Why did you feel jealous about <person> in the note from <date>? (title, date) \n
                 2: Looking back, how would you handle <experience> differently? (title, date) \n
                 3: How do you feel about your progress towards <goal>? (title, date) \n
                 4: Try to write a note about <relationship> from the perspective of <person>. (title, date) \n
                 5: Rearrange your to-do list with a focus on <goal>. \n"""
-    questions_response = co.generate(prompt=prompt, max_tokens=300, temperature=0.0)
+    questions_response = co.generate(prompt=prompt, max_tokens=200, temperature=0.0)
     content = questions_response.generations[0].text
 
     split_text = content.split("\n")
@@ -60,17 +58,15 @@ class SummarizeNotes(Resource):
         notes = request.json["notes"]
         notes_string = ""
         for note in notes:
-            notes_string += (
-                note["title"]
-                + "\n"
-                + "Date:"
-                + note["date"]
-                + "\n"
-                + note["content"]
-                + "Sentiment:"
-                + note["sentiment"]
-                + "\n\n"
-            )
+            notes_string += note["title"] + "\n" + "Date:" + note["date"] + "\n"
+            try:
+                notes_string += "Sentiment:" + note["sentiment"] + "\n"
+                notes_string += "Types:" + ",".join(note["types"]) + "\n"
+            except:
+                pass
+            finally:
+                notes_string += note["content"] + "\n"
+
         format = request.json.get("format", "paragraph")
         summary = getSummary(notes_string, format)
         questions = getQuestions(notes_string)
