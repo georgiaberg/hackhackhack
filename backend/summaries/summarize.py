@@ -60,10 +60,8 @@ class SummarizeNotes(Resource):
         notes_string = ""
 
         for note in notes:
-            title = note["title"]
-            formatted_date = "Date:" + note["date"] + "\n"
-            notes_string += title + "\n" + formatted_date
             try:
+                notes_string += note["title"] + ", Date:" + note["date"] + "\n"
                 notes_string += "Sentiment:" + note["sentiment"] + "\n"
                 notes_string += "Types:" + ",".join(note["types"]) + "\n"
             except:

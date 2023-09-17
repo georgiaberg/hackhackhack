@@ -56,11 +56,12 @@ def mass_upload():
 @app.route('/add_note', methods=['POST'])
 def add_note():
     try:
+        print(request.json)
         note_data = request.json
         title = note_data['title']
         content = note_data['content']
         date = note_data['date']
-        categorized_note = catty(note_data["content"])
+        categorized_note = catty(note_data)
         sentiment = categorized_note['sentiment']
         types = categorized_note['types']
         
