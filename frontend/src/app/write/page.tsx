@@ -11,18 +11,25 @@ const font = Newsreader({ weight: ["300", "400"], subsets: ["latin"] });
 const SAVE_DELAY = 5 * 1000;
 
 export const WriteContent: React.FC<{}> = () => {
-  const [title, setTitle] = React.useState<string>("");
   const lastSavedRef = React.useRef<HTMLSpanElement>(null);
 
+  const title = React.useRef<string>(""); // ref to prevent dom updates
   const content = React.useRef<string>(""); // ref to prevent dom updates
   const pendingUpdate = React.useRef<boolean>(false);
+  const hasEverBeenSaved = React.useRef<boolean>(false);
 
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    title.current = event.target.value;
+    console.log("changed?", title);
+    tryStartingUpdateSequence();
   };
 
   const handleNoteUpdate = (value: string) => {
     content.current = value;
+    tryStartingUpdateSequence();
+  };
+
+  const tryStartingUpdateSequence = () => {
     if (!pendingUpdate.current) {
       setTimeout(updateNote, SAVE_DELAY);
       pendingUpdate.current = true;
@@ -33,7 +40,27 @@ export const WriteContent: React.FC<{}> = () => {
     }
   };
 
+  // actually sends the request updating the note
   const updateNote = () => {
+    if (!hasEverBeenSaved.current) {
+      fetch("http://127.0.0.1:5000/add_note", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: title.current,
+          date: new Date().toISOString(),
+          content: content.current,
+        }),
+      }).then(async (response) => {
+        if (response.status === 201) {
+          hasEverBeenSaved.current = true;
+          console.log("success!");
+        } else {
+          console.error("problem");
+        }
+      });
+    }
+
     if (lastSavedRef.current) {
       lastSavedRef.current.innerText = `Last saved at ${new Date().toDateString()}`;
     }
@@ -45,9 +72,8 @@ export const WriteContent: React.FC<{}> = () => {
     <div id={styles.writeContent} className={font.className}>
       <input
         id="new-title"
-        value={title}
         placeholder="New note"
-        onChange={handleInput}
+        onChange={handleTitleChange}
       ></input>
       <div id="quill-container">
         <ReactQuill theme="snow" onChange={handleNoteUpdate}></ReactQuill>
