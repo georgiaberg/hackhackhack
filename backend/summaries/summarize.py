@@ -14,7 +14,7 @@ def getSummary(notes_string, format="paragraph"):
     try:
         response = co.generate(
             prompt=f"Summarize the following journal entries in a second-person, reflection-inspiring tone:{notes_string}",
-            max_tokens=300,
+            max_tokens=250,
             temperature=0.3,
         )
         summary = response.generations[0].text.strip()
