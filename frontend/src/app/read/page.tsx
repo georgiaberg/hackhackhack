@@ -4,6 +4,7 @@ import styles from "./read.module.scss";
 import { Note } from "@/types/types";
 import React from "react";
 import { Newsreader } from "next/font/google";
+import Link from "next/link";
 
 const MAX_CARD_CONTENT_LENGTH = 400;
 
@@ -98,6 +99,11 @@ const Modal: React.FC<{
       <h1>{note.title}</h1>
       <span>{new Date(note.date).toDateString()}</span>
       <div id="modal-operations">
+        <Link href={`/write?note=${note.id}`}>
+          <span id="modal-close-btn">
+            Edit
+          </span>
+        </Link>
         <span id="modal-delete-btn" onClick={onDelete}>
           Delete
         </span>
