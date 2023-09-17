@@ -5,27 +5,53 @@ import styles from "./write.module.scss";
 import { Newsreader } from "next/font/google";
 import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
+import { useSearchParams } from "next/navigation";
+import { Note } from "@/types/types";
 
 const font = Newsreader({ weight: ["300", "400"], subsets: ["latin"] });
 
 const SAVE_DELAY = 5 * 1000;
 
 export const WriteContent: React.FC<{}> = () => {
+  const params = useSearchParams();
+
   const lastSavedRef = React.useRef<HTMLSpanElement>(null);
 
-  const title = React.useRef<string>(""); // ref to prevent dom updates
-  const content = React.useRef<string>(""); // ref to prevent dom updates
+  const [title, setTitle] = React.useState<string>("");
+  const [content, setContent] = React.useState<string>("");
   const pendingUpdate = React.useRef<boolean>(false);
-  const noteId = React.useRef<string | null>(null);
+  const noteId = React.useRef<string | null>(params.get("note"));
+
+  const titleElement = React.useRef<HTMLInputElement>(null);
+  const bodyElement = React.useRef<HTMLInputElement>(null);
+
+  const [notes, setNotes] = React.useState<Note[]>([]);
+  React.useEffect(() => {
+    if (params.get("note")) {
+      fetch("http://127.0.0.1:5000/get_notes", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }).then(async (response) => {
+        const json = await response.json();
+        const editedNote = (json.notes as Note[]).find(
+          (note: Note) => `${note.id}` === params.get("note")
+        );
+
+        if (editedNote) {
+          setTitle(editedNote.title);
+          setContent(editedNote.content);
+        }
+      });
+    }
+  }, [params, setNotes, setContent]);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    title.current = event.target.value;
-    console.log("changed?", title);
+    setTitle(event.target.value);
     tryStartingUpdateSequence();
   };
 
   const handleNoteUpdate = (value: string) => {
-    content.current = value;
+    setContent(value);
     tryStartingUpdateSequence();
   };
 
@@ -47,9 +73,9 @@ export const WriteContent: React.FC<{}> = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title: title.current,
+          title: title,
           date: new Date().toISOString(),
-          content: content.current,
+          content: content,
         }),
       }).then(async (response) => {
         if (response.status === 201) {
@@ -64,10 +90,10 @@ export const WriteContent: React.FC<{}> = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title: title.current,
+          title: title,
           date: new Date().toISOString(),
-          content: content.current,
-          id: noteId.current
+          content: content,
+          id: noteId.current,
         }),
       }).then(async (response) => {
         if (response.status === 201) {
@@ -90,10 +116,16 @@ export const WriteContent: React.FC<{}> = () => {
       <input
         id="new-title"
         placeholder="New note"
+        ref={titleElement}
         onChange={handleTitleChange}
+        value={title}
       ></input>
       <div id="quill-container">
-        <ReactQuill theme="snow" onChange={handleNoteUpdate}></ReactQuill>
+        <ReactQuill
+          theme="snow"
+          onChange={handleNoteUpdate}
+          value={content}
+        ></ReactQuill>
       </div>
       <div>
         <span id={styles.lastSaved} ref={lastSavedRef}>
