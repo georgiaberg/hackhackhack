@@ -4,10 +4,10 @@ from flask_cors import CORS  # Import the CORS package
 import psycopg2
 import os
 from dotenv import load_dotenv
+from contextlib import closing
 
-from categories.categorize import CategorizeNotes
+from categories.categorize import categorize_note
 from summaries.summarize import SummarizeNotes
-
 
 
 app = Flask(__name__)
@@ -17,9 +17,16 @@ api = Api(app)
 load_dotenv()
 # Load environment variables from .env file
 DATABASE_URL = os.environ['DATABASE_URL']
-print (DATABASE_URL)
+
 def connect_to_cockroachdb():
     return psycopg2.connect(DATABASE_URL)
+
+def execute_query(query, params):
+    with closing(connect_to_cockroachdb()) as conn:
+        with conn.cursor() as cur:
+            cur.execute(query, params)
+            conn.commit()
+
 
 @app.route('/add_note', methods=['POST'])
 def add_note():
@@ -28,39 +35,37 @@ def add_note():
         title = note_data['title']
         content = note_data['content']
         date = note_data['date']
-
-        conn = connect_to_cockroachdb()
-        cur = conn.cursor()
-        cur.execute("INSERT INTO notes (title, content, date) VALUES (%s, %s, %s) RETURNING id", (title, content, date))
-        note_id = cur.fetchone()[0]
+        categorized_note = categorize_note(note_data)
+        sentiment = categorized_note.get('sentiment', 'unknown')
+        types = categorized_note.get('types', [])
         
-        conn.commit()
-        cur.close()
-        conn.close()
-
+        with closing(connect_to_cockroachdb()) as conn:
+            with conn.cursor() as cur:
+                cur.execute("INSERT INTO notes (title, content, date, sentiment, types) VALUES (%s, %s, %s, %s, %s) RETURNING id", 
+                            (title, content, date, sentiment, types))
+                note_id = cur.fetchone()[0]
+                conn.commit()
+        
         return jsonify({"message": "Note added successfully", "note_id": note_id}), 201
 
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+
     
 @app.route('/edit_note', methods=['POST'])
-def edit_notes():
+def edit_note():
     try:
         note_data = request.json
         id = note_data['id']
         title = note_data['title']
         content = note_data['content']
         date = note_data['date']
-
-        conn = connect_to_cockroachdb()
-        cur = conn.cursor()
-        cur.execute("UPDATE notes SET title = %s, content = %s, date = %s WHERE id = %s", (title, content, date, id))
-        conn.commit()
-        cur.close()
-        conn.close()
-
+        
+        query = "UPDATE notes SET title = %s, content = %s, date = %s WHERE id = %s"
+        execute_query(query, (title, content, date, id))
+        
         return jsonify({"message": "Note edited successfully"}), 201
-    
+
     except Exception as e:
         return jsonify({"error": str(e)}), 400
     
@@ -69,14 +74,10 @@ def delete_note():
     try:
         note_data = request.json
         id = note_data['id']
-
-        conn = connect_to_cockroachdb()
-        cur = conn.cursor()
-        cur.execute("DELETE FROM notes WHERE id = %s", (id,))
-        conn.commit()
-        cur.close()
-        conn.close()
-
+        
+        query = "DELETE FROM notes WHERE id = %s"
+        execute_query(query, (id,))
+        
         return jsonify({"message": "Note deleted successfully"}), 201
 
     except Exception as e:
@@ -85,13 +86,9 @@ def delete_note():
 @app.route('/clear_notes', methods=['POST'])
 def clear_notes():
     try:
-        conn = connect_to_cockroachdb()
-        cur = conn.cursor()
-        cur.execute("DELETE FROM notes")
-        conn.commit()
-        cur.close()
-        conn.close()
-
+        query = "DELETE FROM notes"
+        execute_query(query, ())
+        
         return jsonify({"message": "Notes cleared successfully"}), 201
 
     except Exception as e:
@@ -107,16 +104,15 @@ def get_notes():
         cur.close()
         conn.close()
 
-        notes = [{"id": row[0], "title": row[1], "content": row[2], "date": row[3], "sentiment": row[4], "types": row[5]} for row in result]
+        notes = [{"id": row[0], "title": row[1], "content": row[2],
+                  "date": row[3], "sentiment": row[4], "types": row[5]} for row in result]
         return jsonify({"notes": notes}), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-api.add_resource(CategorizeNotes, '/api/categorize')
 api.add_resource(SummarizeNotes, '/api/summarize')
 
 
 if __name__ == '__main__':
     app.run(debug=True)
-
