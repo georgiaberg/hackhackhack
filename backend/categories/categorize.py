@@ -87,15 +87,15 @@ def catty(note):
     counts = {'Goal': 0, 'Experience': 0, 'Relationship': 0, 'To-do': 0}
     
     for i, (intention, emotion) in enumerate(zip(responseIntention, responseEmotion)):
-        # if emotion.prediction == "Positive":
-        #     emotionSum += 1
-        # elif emotion.prediction == "Negative":
-        #     emotionSum -= 1
+        if emotion.prediction == "Positive":
+            emotionSum += 1
+        elif emotion.prediction == "Negative":
+            emotionSum -= 1
         
         if intention.prediction in counts:
             counts[intention.prediction] += 1
-    note["sentiment"] = responseEmotion[0].prediction
-    # note["sentiment"] = "Positive" if emotionSum > 1 else "Negative" if emotionSum < 0 else "Neutral"
+
+    note["sentiment"] = "Positive" if emotionSum > 1 else "Negative" if emotionSum < 0 else "Neutral"
     
     # Find the top two types
     top_two_types = sorted(counts, key=counts.get, reverse=True)[:2]

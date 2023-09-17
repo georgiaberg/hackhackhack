@@ -60,11 +60,11 @@ class SummarizeNotes(Resource):
         notes_string = ""
 
         for note in notes:
-            # date is in UTC format so we need to convert it to a more readable format
-            # date_object = datetime.strptime(note["date"], "%Y-%m-%dT%H:%M:%S.%fZ")
-            # formatted_date = date_object.strftime("%B %d")  # Converts to "Month Day"
-            # + "Date:" + formatted_date + "\n"
-            notes_string += note["title"] + "\n"
+            try:
+                date_object = datetime.strptime(note["date"], "%Y-%m-%dT%H:%M:%S.%fZ")
+                formatted_date = "Date:" + date_object.strftime("%B %d") + "\n"
+            except:
+                formatted_date = "Date: Unknown\n"
             try:
                 notes_string += "Sentiment:" + note["sentiment"] + "\n"
                 notes_string += "Types:" + ",".join(note["types"]) + "\n"
