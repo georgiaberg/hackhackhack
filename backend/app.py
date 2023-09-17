@@ -27,6 +27,31 @@ def execute_query(query, params):
             cur.execute(query, params)
             conn.commit()
 
+# mass upload notes for testing
+@app.route('/mass_upload', methods=['POST'])
+def mass_upload():
+    try:
+        notes = request.json["notes"]
+        for note in notes:
+            title = note['title']
+            content = note['content']
+            date = note['date']
+            categorized_note = catty(note["content"])
+            sentiment = categorized_note['sentiment']
+            types = categorized_note['types']
+            
+            with closing(connect_to_cockroachdb()) as conn:
+                with conn.cursor() as cur:
+                    cur.execute("INSERT INTO notes (title, content, date, sentiment, types) VALUES (%s, %s, %s, %s, %s) RETURNING id", 
+                                (title, content, date, sentiment, types))
+                    note_id = cur.fetchone()[0]
+                    conn.commit()
+    
+        return jsonify({"message": "Notes added successfully"}), 201
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
 
 @app.route('/add_note', methods=['POST'])
 def add_note():
@@ -67,7 +92,7 @@ def edit_note():
         types = categorized_note['types']
 
         # Update the note in the database
-        query = """UPDATE notes 
+        query = """UPDATE notes
                    SET title = %s, content = %s, date = %s, sentiment = %s, types = %s 
                    WHERE id = %s"""
         execute_query(query, (title, content, date, sentiment, types, id))
