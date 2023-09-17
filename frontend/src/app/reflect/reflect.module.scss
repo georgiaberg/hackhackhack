@@ -5,3 +5,40 @@
   margin: auto;
   padding-top: 32px;
 }
+
+.reflectionSection {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+
+  [class~="icon"] {
+    max-width: 200px;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  [class~="description"] {
+    p, li {
+      line-height: 1.15em;
+    }
+
+    li {
+      list-style-type: none;
+      border-left: 2px solid var(--warm-orange);
+    }
+
+    [class~="quotes"] {
+      padding-left: 16px;
+    }
+    
+    [class~="conclusion"] {
+      padding: 1em;
+      [class~="conclusion-type"] {
+        display: block;
+        font-weight: 700;
+      }
+    }
+  }
+}
