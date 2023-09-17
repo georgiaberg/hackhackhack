@@ -40,6 +40,60 @@ def add_note():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+    
+@app.route('/edit_note', methods=['POST'])
+def edit_notes():
+    try:
+        note_data = request.json
+        id = note_data['id']
+        title = note_data['title']
+        content = note_data['content']
+        date = note_data['date']
+
+        conn = connect_to_cockroachdb()
+        cur = conn.cursor()
+        cur.execute("UPDATE notes SET title = %s, content = %s, date = %s WHERE id = %s", (title, content, date, id))
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return jsonify({"message": "Note edited successfully"}), 201
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+    
+@app.route('/delete_note', methods=['POST'])
+def delete_note():
+    try:
+        note_data = request.json
+        id = note_data['id']
+
+        conn = connect_to_cockroachdb()
+        cur = conn.cursor()
+        cur.execute("DELETE FROM notes WHERE id = %s", (id,))
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return jsonify({"message": "Note deleted successfully"}), 201
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+@app.route('/clear_notes', methods=['POST'])
+def clear_notes():
+    try:
+        conn = connect_to_cockroachdb()
+        cur = conn.cursor()
+        cur.execute("DELETE FROM notes")
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return jsonify({"message": "Notes cleared successfully"}), 201
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 @app.route('/get_notes', methods=['GET'])
 def get_notes():
