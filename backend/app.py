@@ -73,8 +73,9 @@ def edit_note():
 def delete_note():
     try:
         note_data = request.json
-        id = note_data['id']
+        id = int(note_data['id'])
         
+        print(id)
         query = "DELETE FROM notes WHERE id = %s"
         execute_query(query, (id,))
         
@@ -103,6 +104,8 @@ def get_notes():
         result = cur.fetchall()
         cur.close()
         conn.close()
+        
+        print(result)
 
         notes = [{"id": row[0], "title": row[1], "content": row[2],
                   "date": row[3], "sentiment": row[4], "types": row[5]} for row in result]

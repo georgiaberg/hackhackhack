@@ -10,7 +10,7 @@ import { Note } from "@/types/types";
 
 const font = Newsreader({ weight: ["300", "400"], subsets: ["latin"] });
 
-const SAVE_DELAY = 5 * 1000;
+const SAVE_DELAY = 3 * 1000;
 
 export const WriteContent: React.FC<{}> = () => {
   const params = useSearchParams();
@@ -19,7 +19,7 @@ export const WriteContent: React.FC<{}> = () => {
 
   const [title, setTitle] = React.useState<string>("");
   const [content, setContent] = React.useState<string>("");
-  const pendingUpdate = React.useRef<boolean>(false);
+  const [pendingUpdate, setPendingUpdate] = React.useState<boolean>(false);
   const noteId = React.useRef<string | null>(params.get("note"));
 
   const titleElement = React.useRef<HTMLInputElement>(null);
@@ -46,19 +46,20 @@ export const WriteContent: React.FC<{}> = () => {
   }, [params, setNotes, setContent]);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(title);
     setTitle(event.target.value);
     tryStartingUpdateSequence();
   };
 
   const handleNoteUpdate = (value: string) => {
+    console.log(content);
     setContent(value);
     tryStartingUpdateSequence();
   };
 
   const tryStartingUpdateSequence = () => {
-    if (!pendingUpdate.current) {
-      setTimeout(updateNote, SAVE_DELAY);
-      pendingUpdate.current = true;
+    if (!pendingUpdate) {
+      setPendingUpdate(true);
 
       if (lastSavedRef.current) {
         lastSavedRef.current.innerText = `Saving...`;
@@ -67,7 +68,8 @@ export const WriteContent: React.FC<{}> = () => {
   };
 
   // actually sends the request updating the note
-  const updateNote = () => {
+  const updateNote = React.useCallback(() => {
+    console.log(title, content);
     if (!noteId.current) {
       fetch("http://127.0.0.1:5000/add_note", {
         method: "POST",
@@ -108,8 +110,19 @@ export const WriteContent: React.FC<{}> = () => {
       lastSavedRef.current.innerText = `Last saved at ${new Date().toDateString()}`;
     }
 
-    pendingUpdate.current = false;
-  };
+    setPendingUpdate(false);
+  }, [title, content]);
+
+  React.useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (pendingUpdate) {
+      timeout = setTimeout(updateNote, SAVE_DELAY);
+    }
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [title, content, pendingUpdate, updateNote]);
 
   return (
     <div id={styles.writeContent} className={font.className}>
