@@ -26,18 +26,47 @@
 
     li {
       list-style-type: none;
+      margin: 8px 0;
+      padding-left: 8px;
       border-left: 2px solid var(--warm-orange);
     }
 
     [class~="quotes"] {
-      padding-left: 16px;
+      padding-left: 8px;
     }
     
     [class~="conclusion"] {
       padding: 1em;
+      display: flex;
+      line-height: 1.15em;
+      border: 2px solid var(--warm-orange);
+      border-radius: 8px;
+
       [class~="conclusion-type"] {
         display: block;
         font-weight: 700;
+      }
+
+      [class~="conclusion-button-container"] {
+        flex-grow: 1;
+        text-align: right;
+        display: flex;
+        flex-direction: row-reverse;
+
+        [class~="journal-button"] {
+          padding: 4px 8px;
+          background-color: var(--warm-orange);
+          color: var(--text-invert);
+          display: inline-block;
+
+          &:active {
+            background-color: var(--);
+          }
+
+          span {
+            line-height: 28px;
+          }
+        }
       }
     }
   }

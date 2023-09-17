@@ -4,6 +4,7 @@ import React from "react";
 import styles from "./reflect.module.scss";
 import { Newsreader } from "next/font/google";
 import "react-quill/dist/quill.snow.css";
+import Link from "next/link";
 
 const font = Newsreader({ weight: ["300", "400"], subsets: ["latin"] });
 
@@ -34,9 +35,15 @@ const ReflectionSection: React.FC<{ title: string }> = ({ title }) => {
           <li>Potatoes!! Should be neither green!!! Nor meaty!!!</li>
         </ul>
         <div className="conclusion">
-          <span className="conclusion-type">Opportunity for reflection</span>
-          <span>Why do you think this pattern has emerged?</span>
-          <button>Journal</button>
+          <div className="conclusion-text">
+            <span className="conclusion-type">Opportunity for reflection</span>
+            <span>Why do you think this pattern has emerged?</span>
+          </div>
+          <div className="conclusion-button-container">
+            <Link href="/write" className="journal-button">
+              <span>Journal</span>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
