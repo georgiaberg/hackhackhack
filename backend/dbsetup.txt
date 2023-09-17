@@ -1,7 +1,7 @@
 curl --create-dirs -o $HOME/.postgresql/root.crt 'https://cockroachlabs.cloud/clusters/1364f656-5e2c-4397-9810-dbe1e2ecd8ab/cert'
 # schema in case you were wondering:
 CREATE TABLE IF NOT EXISTS notes (
-    id INT8 NOT NULL DEFAULT unique_rowid(),
+    id UUID NOT NULL DEFAULT gen_random_uuid(),
     title VARCHAR(60) NULL,
     content VARCHAR NULL,
     date TIMESTAMP NULL,
