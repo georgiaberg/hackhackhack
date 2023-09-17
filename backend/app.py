@@ -23,12 +23,6 @@ def connect_to_cockroachdb():
 def add_note():
     try:
         note_data = request.json
-        note_data = {
-            # placeholder values
-            "title": "title",
-            "content": "content",
-            "date": "2021-10-10"
-        }
         title = note_data['title']
         content = note_data['content']
         date = note_data['date']
@@ -55,7 +49,7 @@ def get_notes():
         cur.close()
         conn.close()
 
-        notes = [{"note_id": row[0], "title": row[1], "content": row[2], "date": row[3]} for row in result]
+        notes = [{"id": row[0], "title": row[1], "content": row[2], "date": row[3]} for row in result]
         return jsonify({"notes": notes}), 200
 
     except Exception as e:
