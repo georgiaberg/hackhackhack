@@ -12,8 +12,7 @@ sentiments = ["Positive", "Neutral", "Negative"]
 types = ["Experience", "Goal", "Relationship", "To-do"]
 
 semexamples = [
-    Example("Alex is always so supportive and kind", "Positive"),
-    Example("Sarah has an incredible sense of humor", "Positive"),
+    Example("Alex is always so supportive and kind, and Sarah has an incredible sense of humor", "Positive"),
     Example("David is a true leader and inspires others", "Positive"),
     Example("Emma is a great listener and offers valuable advice", "Positive"),
     Example("Olivia's positivity is infectious", "Positive"),
@@ -28,15 +27,7 @@ semexamples = [
     Example("I'm thankful for the vibrant colors of autumn leaves", "Positive"),
     Example("I feel gratitude for the refreshing scent of pine trees in a forest", "Positive"),
     Example("Today, I woke up at 7:00 AM.", "Neutral"),
-    Example("I made a to-do list for tomorrow.", "Neutral"),
-    Example("I received an email from my coworker about a meeting next week.", "Neutral"),
-    Example("I did some online shopping and ordered a new pair of shoes.", "Neutral"),
-    Example("I cleaned the kitchen and did the dishes.", "Neutral"),
-    Example("I listened to a podcast while doing household chores.", "Neutral"),
-    Example("I wrote a letter to my grandmother.", "Neutral"),
-    Example("I watered the plants on the balcony.", "Neutral"),
-    Example("I took a hot shower before bed.", "Neutral"),
-    Example("I organized my closet and donated some clothes.", "Neutral"),
+    Example("I organized my closet and donated some clothes.", "Positive"),
     Example("I practiced a few new chords on my guitar.", "Positive"),
     Example("I did some meditation to relax before sleep.", "Positive"),
     Example("I updated my budget spreadsheet for the month.", "Neutral"),
@@ -49,7 +40,6 @@ semexamples = [
     Example("I'm overwhelmed and not sure how to cope.", "Negative"),
     Example("Everything is working out really well", "Positive"),
     Example("I need to start coming to class early.", "Neutral"),
-    Example("I need to stop smoking.", "Neutral"),
     Example("I'm so excited for the next steps in my life.", "Positive")
 ]
 
