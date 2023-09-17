@@ -50,3 +50,35 @@
     font-weight: 400;
   }
 }
+
+#readNoteModal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  background-color: var(--light-orange);
+  box-shadow: 0 0 1000px 1000px var(--light-orange-translucent);
+  max-width: 800px;
+  width: 80%;
+
+  [id~="modal-operations"] {  
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    
+    [id~="modal-close-btn"],
+    [id~="modal-delete-btn"] {
+      margin: 0 8px;
+      display: inline-block;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  [id~="modal-content"] {
+    padding: 8px;
+  }
+
+  padding: 2em;
+  text-align: center;
+}
