@@ -91,11 +91,11 @@ export const ReflectContent: React.FC<{}> = () => {
         questions={questions}
         icon={imageSources[0]}
         title="What's new"
+        flipped
       />
       <ReflectionSection
         summary={summary2}
         questions={questions2}
-        flipped
         icon={imageSources[1]}
         title="A look at the past"
       />

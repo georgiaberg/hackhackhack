@@ -25,6 +25,12 @@
   }
 
   [class~="description"] {
+    flex-grow: 1;
+
+    h1 {
+      line-height: 1.15em;
+    }
+
     p, li {
       line-height: 1.15em;
     }
