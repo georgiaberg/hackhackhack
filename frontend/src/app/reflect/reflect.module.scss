@@ -1,5 +1,6 @@
 #reflectContent {
   display: flex;
+  flex-direction: column;
   gap: 32px;
   max-width: var(--max-width);
   margin: auto;
@@ -10,6 +11,10 @@
   display: flex;
   flex-direction: row;
   gap: 16px;
+
+  &[class~="flipped"] {
+    flex-direction: row-reverse;
+  }
 
   [class~="icon"] {
     max-width: 200px;
@@ -31,10 +36,6 @@
       border-left: 2px solid var(--warm-orange);
     }
 
-    [class~="quotes"] {
-      padding-left: 8px;
-    }
-    
     [class~="conclusion"] {
       padding: 1em;
       display: flex;
