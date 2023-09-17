@@ -72,29 +72,30 @@ examples = [
 
 # categories to leverage: experience, to-do, relationship, goal
 def catty(note):
-    string = note["content"]
+    content = note["content"]
     delimiters = ['?', '.', '!']
-    result = [string]
+    result = [content]
     
     for delimiter in delimiters:
         result = [item for sub in result for item in sub.split(delimiter) if item != '']
     
     responseIntention = co.classify(model='large', inputs=result, examples=examples)
-    responseEmotion = co.classify(model='large', inputs=result, examples=semexamples)
-    
+    responseEmotion = co.classify(model='large', inputs=content, examples=semexamples)
+    print(responseEmotion[0])
+
     emotionSum = 0
     counts = {'Goal': 0, 'Experience': 0, 'Relationship': 0, 'To-do': 0}
     
     for i, (intention, emotion) in enumerate(zip(responseIntention, responseEmotion)):
-        if emotion.prediction == "Positive":
-            emotionSum += 1
-        elif emotion.prediction == "Negative":
-            emotionSum -= 1
+        # if emotion.prediction == "Positive":
+        #     emotionSum += 1
+        # elif emotion.prediction == "Negative":
+        #     emotionSum -= 1
         
         if intention.prediction in counts:
             counts[intention.prediction] += 1
-    
-    note["sentiment"] = "Positive" if emotionSum > 0 else "Negative" if emotionSum < -1 else "Neutral"
+    note["sentiment"] = responseEmotion[0].prediction
+    # note["sentiment"] = "Positive" if emotionSum > 1 else "Negative" if emotionSum < 0 else "Neutral"
     
     # Find the top two types
     top_two_types = sorted(counts, key=counts.get, reverse=True)[:2]

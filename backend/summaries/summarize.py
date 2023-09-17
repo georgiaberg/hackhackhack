@@ -60,7 +60,7 @@ class SummarizeNotes(Resource):
         notes_string = ""
 
         for note in notes:
-            date_object = datetime.strptime(note["date"], "%Y-%m-%d")  # Assuming the date is in "YYYY-MM-DD" format
+            date_object = datetime.strptime(note["date"], "%Y-%m-%d %H:%M:%S.%f")  # Adjusted to match your date format
             formatted_date = date_object.strftime("%B %d")  # Converts to "Month Day"
             notes_string += note["title"] + "\n" + "Date:" + formatted_date + "\n"
             try:
