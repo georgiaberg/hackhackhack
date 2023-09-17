@@ -9,7 +9,15 @@ co = cohere.Client("WV73TN52GyHJbEw0OGyqWjP8MMaGgOziFpog4wTQ")
 def getSummary(notes_string, format="paragraph"):
     """Summarize an array of notes using Cohere's summarize API."""
 
-    # Use Cohere API to summarize the notes
+    # Use Cohere API to summarize the notes. If they are too short, use the generate API instead.
+    if len(notes_string) < 275:
+        response = co.generate(
+            prompt=f"Summarize the following journal entries:{notes_string}",
+            max_tokens=100,
+            temperature=0.5
+        )
+        summary = response.generations[0].text.strip()
+        return summary
     response = co.summarize(
         text=notes_string,
         format=format,
@@ -20,7 +28,7 @@ def getSummary(notes_string, format="paragraph"):
 
 
 # categories to leverage: experience, to-do, relationship, goal
-def getQuestions(notes_string, summary):
+def getQuestions(notes_string):
     """Generate reflective questions & exercises based on notes using Cohere's generate API."""
     prompt = f"""Based on the following notes :\n
                 {notes_string},
@@ -59,9 +67,11 @@ class SummarizeNotes(Resource):
                 + note["date"]
                 + "\n"
                 + note["content"]
+                + "Sentiment:"
+                + note["sentiment"]
                 + "\n\n"
             )
         format = request.json.get("format", "paragraph")
         summary = getSummary(notes_string, format)
-        questions = getQuestions(notes_string, summary)
+        questions = getQuestions(notes_string)
         return jsonify({"summary": summary, "questions": questions})
