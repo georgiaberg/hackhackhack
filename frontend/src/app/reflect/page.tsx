@@ -6,6 +6,8 @@ import { Newsreader } from "next/font/google";
 import "react-quill/dist/quill.snow.css";
 import Link from "next/link";
 
+
+
 const font = Newsreader({ weight: ["300", "400"], subsets: ["latin"] });
 
 export const ReflectContent: React.FC<{}> = () => {
@@ -20,8 +22,8 @@ const ReflectionSection: React.FC<{ title: string }> = ({ title }) => {
   return (
     <div className={styles.reflectionSection}>
       <div className="icon">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="https://placekitten.com/g/400/400" alt=""></img>
+       {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src='/heart.png' alt=""></img>
       </div>
       <div className="description">
         <h1>Relationships</h1>

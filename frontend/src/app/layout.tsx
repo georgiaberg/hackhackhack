@@ -10,10 +10,10 @@ import Head from "next/head";
 
 const font = Newsreader({ weight: ["300", "400"], subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Afterthought",
-  description: "An AI-assisted reflection tool",
-};
+//export const metadata: Metadata = {
+ // title: "Afterthought",
+//  description: "An AI-assisted reflection tool",
+//};
 
 export default function RootLayout({
   children,
