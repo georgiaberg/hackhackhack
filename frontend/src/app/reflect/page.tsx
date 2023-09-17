@@ -11,7 +11,7 @@ const font = Newsreader({ weight: ["300", "400"], subsets: ["latin"] });
 
 const getImageSources = () => {
   const source1 = Math.floor(Math.random() * 6);
-  const source2 = (source1 + Math.floor(Math.random() * 5)) % 6;
+  const source2 = (source1 + Math.floor(Math.random() * 5) + 1) % 6;
 
   const getImageSourceByNumber = (n: number): string => {
     switch (n) {
@@ -37,6 +37,10 @@ const getImageSources = () => {
 export const ReflectContent: React.FC<{}> = () => {
   const [summary, setSummary] = React.useState<string>("");
   const [questions, setQuestions] = React.useState<string[]>([]);
+
+  const [summary2, setSummary2] = React.useState<string>("");
+  const [questions2, setQuestions2] = React.useState<string[]>([]);
+  
   const [imageSources] = React.useState(getImageSources());
 
   React.useEffect(() => {
@@ -46,15 +50,36 @@ export const ReflectContent: React.FC<{}> = () => {
     }).then(async (response) => {
       const notes: Note[] = (await response.json()).notes;
 
+      // primary set
       fetch("http://127.0.0.1:5000/api/summarize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ notes: notes }),
+        body: JSON.stringify({
+          notes: notes
+            .sort(
+              (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+            )
+            .slice(0, 5),
+        }),
       }).then(async (response) => {
         const json = await response.json();
 
         setQuestions(json.questions);
         setSummary(json.summary);
+      });
+
+      // secondary set
+      fetch("http://127.0.0.1:5000/api/summarize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          notes: notes.sort(() => 0.5 - Math.random()).slice(0, 5),
+        }),
+      }).then(async (response) => {
+        const json = await response.json();
+
+        setQuestions2(json.questions);
+        setSummary2(json.summary);
       });
     });
   }, [setSummary]);
@@ -65,23 +90,26 @@ export const ReflectContent: React.FC<{}> = () => {
         summary={summary}
         questions={questions}
         icon={imageSources[0]}
+        title="What's new"
       />
       <ReflectionSection
-        summary={summary}
-        questions={questions}
+        summary={summary2}
+        questions={questions2}
         flipped
         icon={imageSources[1]}
+        title="A look at the past"
       />
     </div>
   );
 };
 
 const ReflectionSection: React.FC<{
+  title: string;
   summary: string;
   questions: string[];
   icon: string;
   flipped?: boolean;
-}> = ({ summary, questions, icon, flipped }) => {
+}> = ({ title, summary, questions, icon, flipped }) => {
   return (
     <div
       className={styles.reflectionSection + " " + (flipped ? "flipped" : "")}
@@ -91,7 +119,7 @@ const ReflectionSection: React.FC<{
         <img src={icon} alt=""></img>
       </div>
       <div className="description">
-        <h1>Your past week</h1>
+        <h1>{title}</h1>
         <p>{summary} </p>
         <div className="conclusion">
           <div className="conclusion-text">
