@@ -13,10 +13,10 @@ def getSummary(notes_string, format="paragraph"):
     # Use Cohere API to summarize the notes. If they are too short, use the generate API instead.
     try:
         response = co.generate(
-            prompt=f"Summarize the following journal entries in a second-person, reflection-inspiring tone:{notes_string}",
-            max_tokens=200,
+            prompt=f"Summarize the following journal entries coherently in < 250 words with second-person, reflection-inspiring tone.\n{notes_string}",
+            max_tokens=250,
             temperature=0.3,
-            model="command-light"
+            model="command"
         )
         summary = response.generations[0].text.strip()
     except:
@@ -32,18 +32,19 @@ def getSummary(notes_string, format="paragraph"):
 # categories to leverage: experience, to-do, relationship, goal
 def getQuestions(notes_string):
     """Generate reflective questions & exercises based on notes using Cohere's generate API."""
-    prompt = f"""Based on the following notes :\n
-                {notes_string},
-                what reflective questions or exercises can be asked?
-                Please come up with no more than 5 creative reflective questions writing exercises.
-                You must cite the title and date of the note relating to your question or exercise.
-                Here are some examples, follow this format and don't output anything extra. \n
-                1. Why did you feel jealous about in the note from <date>? (title, date) \n
-                2: Looking back, how would you handle <experience> differently? \n
-                3: How do you feel about your progress towards <goal>? (title, date) \n
-                4: Try to write a note about <relationship> from the perspective of <person>. (title, date) \n
-                5: Rearrange your to-do list with a focus on <goal>. \n"""
-    questions_response = co.generate(prompt=prompt, max_tokens=150, temperature=0.0, model="command-light")
+    prompt = f"""Based on the following collection of notes, generate reflective questions or exercises that could help deepen understanding or inspire reflection. The notes are as follows:
+
+        {notes_string}
+
+        Please generate up to 5 reflective questions or writing exercises. Make sure to cite the title and date of the note that each question or exercise relates to.
+        If that's not possible, omit the title and date. Follow this format and don't include extra content after the last question or exercise.
+        Example output:
+        1. How effectively were tasks delegated in the 'Meeting with Team' note? (Meeting with Team, 2023-09-16)
+        2. What aspects of the code could be improved based on your 'Code Review' note? (Code Review, 2023-09-15)
+        3. How did the visit to the zoo with Aunt Madalyn make you feel? (Client Feedback, 2023-09-14)*
+        """
+
+    questions_response = co.generate(prompt=prompt, max_tokens=175, temperature=0.0, model="command-light", end_sequences=["*"])
     content = questions_response.generations[0].text
 
     split_text = content.split("\n")
