@@ -31,7 +31,8 @@ const getImageSources = () => {
     }
   };
 
-  return [source1, source2].map(getImageSourceByNumber);
+  return [4, 1].map(getImageSourceByNumber);
+  // return [source1, source2].map(getImageSourceByNumber);
 };
 
 export const ReflectContent: React.FC<{}> = () => {

@@ -72,9 +72,9 @@ export const WriteContent: React.FC<{}> = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title: title,
+          title: title.length > 0 ? title : "untitled",
+          content: content.length > 0 ? content : "no content",
           date: new Date().toISOString(),
-          content: content,
         }),
       }).then(async (response) => {
         if (response.status === 201) {
@@ -89,9 +89,9 @@ export const WriteContent: React.FC<{}> = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title: title,
+          title: title.length > 0 ? title : "untitled",
+          content: content.length > 0 ? content : "no content",
           date: new Date().toISOString(),
-          content: content,
           id: noteId.current,
         }),
       }).then(async (response) => {
