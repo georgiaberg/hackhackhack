@@ -60,11 +60,9 @@ class SummarizeNotes(Resource):
         notes_string = ""
 
         for note in notes:
-            try:
-                date_object = datetime.strptime(note["date"], "%Y-%m-%dT%H:%M:%S.%fZ")
-                formatted_date = "Date:" + date_object.strftime("%B %d") + "\n"
-            except:
-                formatted_date = "Date: Unknown\n"
+            title = note["title"]
+            formatted_date = "Date:" + note["date"] + "\n"
+            notes_string += title + "\n" + formatted_date
             try:
                 notes_string += "Sentiment:" + note["sentiment"] + "\n"
                 notes_string += "Types:" + ",".join(note["types"]) + "\n"
