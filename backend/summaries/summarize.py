@@ -2,6 +2,7 @@ from flask import request, jsonify
 from flask_restful import Resource
 import cohere
 import re
+from datetime import datetime
 
 co = cohere.Client("WV73TN52GyHJbEw0OGyqWjP8MMaGgOziFpog4wTQ")
 
@@ -10,18 +11,18 @@ def getSummary(notes_string, format="paragraph"):
     """Summarize an array of notes using Cohere's summarize API."""
 
     # Use Cohere API to summarize the notes. If they are too short, use the generate API instead.
-    if len(notes_string) < 275:
+    try:
         response = co.generate(
-            prompt=f"Summarize the following journal entries:{notes_string}",
-            max_tokens=100,
-            temperature=0.5,
+            prompt=f"Summarize the following journal entries in a second-person, reflection-inspiring tone:{notes_string}",
+            max_tokens=300,
+            temperature=0.3,
         )
         summary = response.generations[0].text.strip()
-    else:
+    except:
         response = co.summarize(
             text=notes_string,
             format=format,
-            additional_command="in a third-person, reflection-inspiring tone",
+            additional_command="in a second-person, reflection-inspiring tone",
         )
         summary = response.summary
     return summary
@@ -57,8 +58,11 @@ class SummarizeNotes(Resource):
     def post(self):
         notes = request.json["notes"]
         notes_string = ""
+
         for note in notes:
-            notes_string += note["title"] + "\n" + "Date:" + note["date"] + "\n"
+            date_object = datetime.strptime(note["date"], "%Y-%m-%d")  # Assuming the date is in "YYYY-MM-DD" format
+            formatted_date = date_object.strftime("%B %d")  # Converts to "Month Day"
+            notes_string += note["title"] + "\n" + "Date:" + formatted_date + "\n"
             try:
                 notes_string += "Sentiment:" + note["sentiment"] + "\n"
                 notes_string += "Types:" + ",".join(note["types"]) + "\n"

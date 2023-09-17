@@ -104,7 +104,7 @@ def catty(note):
         if intention.prediction in counts:
             counts[intention.prediction] += 1
     
-    note["sentiment"] = "Positive" if emotionSum > 1 else "Negative" if emotionSum < -1 else "Neutral"
+    note["sentiment"] = "Positive" if emotionSum > 0 else "Negative" if emotionSum < -1 else "Neutral"
     
     # Find the top two types
     top_two_types = sorted(counts, key=counts.get, reverse=True)[:2]
