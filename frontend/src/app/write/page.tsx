@@ -16,7 +16,7 @@ export const WriteContent: React.FC<{}> = () => {
   const title = React.useRef<string>(""); // ref to prevent dom updates
   const content = React.useRef<string>(""); // ref to prevent dom updates
   const pendingUpdate = React.useRef<boolean>(false);
-  const hasEverBeenSaved = React.useRef<boolean>(false);
+  const noteId = React.useRef<string | null>(null);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     title.current = event.target.value;
@@ -42,7 +42,7 @@ export const WriteContent: React.FC<{}> = () => {
 
   // actually sends the request updating the note
   const updateNote = () => {
-    if (!hasEverBeenSaved.current) {
+    if (!noteId.current) {
       fetch("http://127.0.0.1:5000/add_note", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -53,10 +53,27 @@ export const WriteContent: React.FC<{}> = () => {
         }),
       }).then(async (response) => {
         if (response.status === 201) {
-          hasEverBeenSaved.current = true;
-          console.log("success!");
+          noteId.current = (await response.json()).note_id;
+          console.log("successful post!");
         } else {
-          console.error("problem");
+          console.error("problematic post");
+        }
+      });
+    } else {
+      fetch("http://127.0.0.1:5000/edit_note", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: title.current,
+          date: new Date().toISOString(),
+          content: content.current,
+          id: noteId.current
+        }),
+      }).then(async (response) => {
+        if (response.status === 201) {
+          console.log("successful edit!");
+        } else {
+          console.error("problematic edit");
         }
       });
     }

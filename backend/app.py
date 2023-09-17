@@ -31,12 +31,14 @@ def add_note():
 
         conn = connect_to_cockroachdb()
         cur = conn.cursor()
-        cur.execute("INSERT INTO notes (title, content, date) VALUES (%s, %s, %s)", (title, content, date))
+        cur.execute("INSERT INTO notes (title, content, date) VALUES (%s, %s, %s) RETURNING id", (title, content, date))
+        note_id = cur.fetchone()[0]
+        
         conn.commit()
         cur.close()
         conn.close()
 
-        return jsonify({"message": "Note added successfully"}), 201
+        return jsonify({"message": "Note added successfully", "note_id": note_id}), 201
 
     except Exception as e:
         return jsonify({"error": str(e)}), 400
