@@ -3,8 +3,6 @@ from flask import request, jsonify
 from flask_restful import Resource
 import cohere
 from collections import defaultdict
-# from sentiment_examples import semexamples, sentiments
-# from type_examples import examples, types
 import datetime
 from cohere.responses.classify import Example
 
@@ -82,7 +80,7 @@ examples = [
     Example("I'm constantly inspired by Sarah's creative talents.", "Relationship"),
     ]
 
-
+# categories to leverage: experience, to-do, relationship, goal
 def catty(note):
     string = note["content"]
     delimiters = ['?', '.', '!']
@@ -106,7 +104,7 @@ def catty(note):
         if intention.prediction in counts:
             counts[intention.prediction] += 1
     
-    note["sentiment"] = "Positive" if emotionSum > 1 else "Negative" if emotionSum < -1 else "Neutral"
+    note["sentiment"] = "Positive" if emotionSum > 0 else "Negative" if emotionSum < -1 else "Neutral"
     
     # Find the top two types
     top_two_types = sorted(counts, key=counts.get, reverse=True)[:2]
