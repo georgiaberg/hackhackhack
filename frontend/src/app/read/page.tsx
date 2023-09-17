@@ -36,9 +36,11 @@ const SampleData: Note[] = [
 export const ReadContent: React.FC<{}> = () => {
   return (
     <div className={font.className} id={styles.noteCards}>
-      {SampleData.map((note) => (
-        <NoteCard note={note} key={note.date} />
-      ))}
+      <div id="notes-list-inner">
+        {SampleData.map((note) => (
+          <NoteCard note={note} key={note.date} />
+        ))}
+      </div>
     </div>
   );
 };

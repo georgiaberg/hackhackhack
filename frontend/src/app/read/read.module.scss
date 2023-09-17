@@ -2,11 +2,15 @@
   max-width: var(--max-width);
   margin: auto;
   padding-top: 20px;
-  padding-bottom: 100px;
-
-  display: flex;
-  gap: 40px;
-  flex-direction: column;
+  overflow: auto;
+  max-height: calc(100vh - 128px);
+  
+  [id~="notes-list-inner"] {
+    display: flex;
+    gap: 40px;
+    flex-direction: column;
+    padding-bottom: 100px;
+  }
 }
 
 .readCard {
