@@ -9,19 +9,15 @@ import Link from "next/link";
 const font = Newsreader({ weight: ["300", "400"], subsets: ["latin"] });
 
 export const ReflectContent: React.FC<{}> = () => {
-  return <div id={styles.reflectContent} className={font.className}>
-    <ReflectionSection name="Relationships"/>
-    <ReflectionSection name="You"/>
-    <ReflectionSection name="World"/>
-  </div>;
+  return (
+    <div id={styles.reflectContent} className={font.className}>
+      <ReflectionSection title="Relationships" />
+    </div>
+  );
 };
 
-const ReflectionSection: React.FC<{ name: string }> = ({ name }) => {
-  return (
-    <Link className="reflection-button" href="/reflect/detail">
-      <span>{name}</span>
-    </Link>
-  );
+const ReflectionSection: React.FC<{ title: string }> = ({ title }) => {
+  return <h1>{title}</h1>;
 };
 
 export default ReflectContent;

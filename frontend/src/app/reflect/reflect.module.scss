@@ -4,20 +4,4 @@
   max-width: var(--max-width);
   margin: auto;
   padding-top: 32px;
-
-  [class~="reflection-button"] {
-    width: 100%;
-    aspect-ratio: 1/1;
-    background-color: var(--background-2);
-    color: var(--text);
-    text-align: center;
-    transition: 0.1s linear;
-    cursor: pointer;
-    border: none;
-
-    &:hover {
-      background-color: var(--background-3);
-      color: var(--text-invert);
-    }
-  }
 }
