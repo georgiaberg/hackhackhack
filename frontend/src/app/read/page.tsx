@@ -1,5 +1,8 @@
+"use client"
+
 import styles from "./read.module.scss";
 import { Note } from "@/types/types";
+import React from "react";
 import { Newsreader } from "next/font/google";
 
 const MAX_CARD_CONTENT_LENGTH = 400;
@@ -27,13 +30,23 @@ const SampleData: Note[] = [
   },
   {
     title: "Note 4",
-    date: "yesterday",
+    date: "yesterday 2",
     content:
       "I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… He had such a knowledge of the dark side, he could even keep the ones he cared about from dying. I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… He had such a knowledge of the dark side, he could even keep the ones he cared about from dying. I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… He had such a knowledge of the dark side, he could even keep the ones he cared about from dying.",
   },
 ];
 
 export const ReadContent: React.FC<{}> = () => {
+  React.useEffect(() => {
+    fetch("http://127.0.0.1:5000/get_notes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title: "React POST Request Example" }),
+    }).then(async (response) => {
+      console.log(await response.json());
+    });
+  }, []);
+
   return (
     <div className={font.className} id={styles.noteCards}>
       <div id="notes-list-inner">

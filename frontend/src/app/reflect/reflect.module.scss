@@ -1,6 +1,8 @@
 #reflectContent {
   display: flex;
   gap: 32px;
+  max-width: var(--max-width);
+  margin: auto;
   padding-top: 32px;
 
   [class~="reflection-button"] {

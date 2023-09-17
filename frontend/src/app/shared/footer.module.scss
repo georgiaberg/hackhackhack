@@ -7,12 +7,14 @@ div#footer {
   width: 100%;
   font-family: var(--font-family-1);
   font-size: 1.25em;
+  height: 40px;
+  margin-bottom: 20px;
 
   img[id~="inner-footer"] {
     border-bottom: 1px solid var(--warm-orange);
     display: inline-block;
-    margin-bottom: 20px;
     padding-bottom: 4px;
+    height: 100%;
   }
 
   div[id~="footer-shadow"] {

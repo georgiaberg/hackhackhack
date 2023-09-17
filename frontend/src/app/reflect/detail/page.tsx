@@ -6,7 +6,7 @@ import styles from "./reflect-detail.module.scss";
 
 const ReflectDetailContent: React.FC<{}> = () => {
   return (
-    <div id={styles.reviewDetailBody}>
+    <div id={styles.reflectDetailBody}>
       <div className="card">
         <p>
           Throughout the last week, you spent a lot of time looking toward the
