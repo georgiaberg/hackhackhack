@@ -11,7 +11,7 @@ const font = Newsreader({ weight: ["300", "400"], subsets: ["latin"] });
 
 export const ReadContent: React.FC<{}> = () => {
   const [notes, setNotes] = React.useState<Note[]>([]);
- 
+
   React.useEffect(() => {
     fetch("http://127.0.0.1:5000/get_notes", {
       method: "GET",
@@ -48,7 +48,7 @@ const NoteCard: React.FC<{ note: Note }> = ({ note }) => {
         <h1 className="title">{note.title}</h1>
         <span className="date">{date.toDateString()}</span>
       </div>
-      <p>{content}</p>
+      <div dangerouslySetInnerHTML={{ __html: content }}></div>
     </div>
   );
 };
