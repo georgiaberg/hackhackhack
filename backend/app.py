@@ -6,7 +6,7 @@ import os
 from dotenv import load_dotenv
 from contextlib import closing
 
-from categories.categorize import categorize_note
+from categories.categorize import catty
 from summaries.summarize import SummarizeNotes
 
 
@@ -35,9 +35,9 @@ def add_note():
         title = note_data['title']
         content = note_data['content']
         date = note_data['date']
-        categorized_note = categorize_note(note_data)
-        sentiment = categorized_note.get('sentiment', 'unknown')
-        types = categorized_note.get('types', [])
+        categorized_note = catty(note_data)
+        sentiment = categorized_note['sentiment']
+        types = categorized_note['types']
         
         with closing(connect_to_cockroachdb()) as conn:
             with conn.cursor() as cur:
@@ -60,14 +60,23 @@ def edit_note():
         title = note_data['title']
         content = note_data['content']
         date = note_data['date']
-        
-        query = "UPDATE notes SET title = %s, content = %s, date = %s WHERE id = %s"
-        execute_query(query, (title, content, date, id))
-        
+
+        # Categorize the note
+        categorized_note = catty(note_data)
+        sentiment = categorized_note['sentiment']
+        types = categorized_note['types']
+
+        # Update the note in the database
+        query = """UPDATE notes 
+                   SET title = %s, content = %s, date = %s, sentiment = %s, types = %s 
+                   WHERE id = %s"""
+        execute_query(query, (title, content, date, sentiment, types, id))
+
         return jsonify({"message": "Note edited successfully"}), 201
 
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+
     
 @app.route('/delete_note', methods=['POST'])
 def delete_note():
@@ -75,7 +84,6 @@ def delete_note():
         note_data = request.json
         id = int(note_data['id'])
         
-        print(id)
         query = "DELETE FROM notes WHERE id = %s"
         execute_query(query, (id,))
         

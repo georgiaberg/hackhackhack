@@ -1,4 +1,4 @@
-# Experience/To-do/Relationship/Goal
+# contributors: georgiaberg, momalekabid
 from flask import request, jsonify
 from flask_restful import Resource
 import cohere
@@ -41,7 +41,18 @@ semexamples = [
     Example("I organized my closet and donated some clothes.", "Neutral"),
     Example("I practiced a few new chords on my guitar.", "Positive"),
     Example("I did some meditation to relax before sleep.", "Positive"),
-    Example("I updated my budget spreadsheet for the month.", "Neutral")
+    Example("I updated my budget spreadsheet for the month.", "Neutral"),
+    Example("I was running late all day, and then ended up missing a lecture.", "Negative"),
+    Example("The weather really sucked today.", "Negative"),
+    Example("I went to bed around 11:00 PM.", "Neutral"),
+    Example("I cried all day.", "Negative"),
+    Example("I had pains and cramps", "Negative"),
+    Example("My aunt died. I'm in mourning. I haven't been able to sleep.", "Negative"),
+    Example("I'm overwhelmed and not sure how to cope.", "Negative"),
+    Example("Everything is working out really well", "Positive"),
+    Example("I need to start coming to class early.", "Neutral"),
+    Example("I need to stop smoking.", "Neutral"),
+    Example("I'm so excited for the next steps in my life.", "Positive")
 ]
 
 examples = [
@@ -72,62 +83,33 @@ examples = [
     ]
 
 
-def categorize_note(note):
-    """Categorize a single note using Cohere API.
-    The note is annotated with fields 'sentiment' and 'types'.
-    """
-    content = note["content"]
-
-    # Classify sentiment and intention
-    # responseIntention = co.classify(model='large', inputs=content, examples=examples)
-    # responseEmotion = co.classify(model='large', inputs=content, examples=semexamples)
-    # print(responseIntention)
-    # print(responseEmotion)
-
-    # # Annotate sentiment
-    # note["sentiment"] = sentiment_label
-
-    # # Annotate types
-    # note["types"] = [intention_label]
-
-    return note
-
-# def catty(note):
-#     string = note["content"]
-#     delimiters = ['?', '.', '!']
-#     result = [string]
+def catty(note):
+    string = note["content"]
+    delimiters = ['?', '.', '!']
+    result = [string]
     
-#     for delimiter in delimiters:
-#         result = [item for sub in result for item in sub.split(delimiter) if item != '']
+    for delimiter in delimiters:
+        result = [item for sub in result for item in sub.split(delimiter) if item != '']
     
-#     responseIntention = co.classify(model='large', inputs=result, examples=examples)
-#     responseEmotion = co.classify(model='large', inputs=result, examples=semexamples)
+    responseIntention = co.classify(model='large', inputs=result, examples=examples)
+    responseEmotion = co.classify(model='large', inputs=result, examples=semexamples)
     
-#     emotionSum = 0
-#     counts = {'Goal': 0, 'Experience': 0, 'Relationship': 0, 'To-do': 0}
+    emotionSum = 0
+    counts = {'Goal': 0, 'Experience': 0, 'Relationship': 0, 'To-do': 0}
     
-#     for i, (intention, emotion) in enumerate(zip(responseIntention, responseEmotion)):
-#         if emotion.prediction == "Positive":
-#             emotionSum += 1
-#         elif emotion.prediction == "Negative":
-#             emotionSum -= 1
+    for i, (intention, emotion) in enumerate(zip(responseIntention, responseEmotion)):
+        if emotion.prediction == "Positive":
+            emotionSum += 1
+        elif emotion.prediction == "Negative":
+            emotionSum -= 1
         
-#         if intention.prediction in counts:
-#             counts[intention.prediction] += 1
+        if intention.prediction in counts:
+            counts[intention.prediction] += 1
     
-#     note["sentiment"] = "Positive" if emotionSum > 1 else "Negative" if emotionSum < -1 else "Neutral"
+    note["sentiment"] = "Positive" if emotionSum > 1 else "Negative" if emotionSum < -1 else "Neutral"
     
-#     # Find the top two types
-#     top_two_types = sorted(counts, key=counts.get, reverse=True)[:2]
-#     note["Types"] = top_two_types
+    # Find the top two types
+    top_two_types = sorted(counts, key=counts.get, reverse=True)[:2]
+    note["types"] = top_two_types
     
-#     return note
-
-# # Your test data
-# n = {
-#     "title": "Meeting with Team",
-#     "content": "My mom called me today, and told me she’s sick with the flu. She said she was alright, but she didn’t sound too well. I wish she took more time off, she’s always working way too hard. The last time I visited her, she was so stressed from work that she didn’t have the energy to do anything with us at the house.",
-#     "date": "2023-09-16"
-# }
-
-# print(catty(n))
+    return note
