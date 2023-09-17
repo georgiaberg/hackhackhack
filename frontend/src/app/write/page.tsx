@@ -46,13 +46,11 @@ export const WriteContent: React.FC<{}> = () => {
   }, [params, setNotes, setContent]);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(title);
     setTitle(event.target.value);
     tryStartingUpdateSequence();
   };
 
   const handleNoteUpdate = (value: string) => {
-    console.log(content);
     setContent(value);
     tryStartingUpdateSequence();
   };
@@ -69,7 +67,6 @@ export const WriteContent: React.FC<{}> = () => {
 
   // actually sends the request updating the note
   const updateNote = React.useCallback(() => {
-    console.log(title, content);
     if (!noteId.current) {
       fetch("http://127.0.0.1:5000/add_note", {
         method: "POST",
