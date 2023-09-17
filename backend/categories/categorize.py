@@ -110,9 +110,8 @@ examples = [
 
 # categories to leverage: experience, to-do, relationship, goal
 def catty(note):
-    string = note["content"]
     delimiters = ["?", ".", "!"]
-    result = [string]
+    result = [note]
 
     for delimiter in delimiters:
         result = [item for sub in result for item in sub.split(delimiter) if item != ""]
