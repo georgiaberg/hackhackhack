@@ -4,7 +4,6 @@ import cohere
 import re
 from datetime import datetime
 
-co = cohere.Client("WV73TN52GyHJbEw0OGyqWjP8MMaGgOziFpog4wTQ")
 
 
 def getSummary(notes_string, format="paragraph"):

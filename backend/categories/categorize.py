@@ -6,7 +6,6 @@ from collections import defaultdict
 import datetime
 from cohere.responses.classify import Example
 
-co = cohere.Client("WV73TN52GyHJbEw0OGyqWjP8MMaGgOziFpog4wTQ")
 
 sentiments = ["Positive", "Neutral", "Negative"]
 types = ["Experience", "Goal", "Relationship", "To-do"]
